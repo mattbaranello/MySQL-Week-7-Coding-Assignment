@@ -10,10 +10,15 @@ import projects.exception.DbException;
 import projects.service.ProjectService;
 
 public class Projects {
-			
+		
+		
 		private Scanner scanner = new Scanner(System.in);
 		private ProjectService projectService = new ProjectService();		
-
+		
+		/*
+		 * Creates a List called "operations". Included in the list is "1) Add a project". This requires user to input "1" to 
+		 * start the program
+		 */
 		// @formatter:off
 		private List<String> operations = List.of(
 				"1) Add a project"
@@ -26,9 +31,14 @@ public class Projects {
 		
 	}
 		
-
+	//This method displays menu selections, gets a selection from the user, then acts on the selection
 	private void processUserSelections() {
 		boolean done = false;
+		/*
+		 * While loop continues program until it is done, which will then call the "exitMenu" method.
+		 * By default, if the user does not enter a valid selection, the program will print out 
+		 * "\n" + selection + " is not a valid selection. Try again."
+		 */
 		
 		while(!done) {
 			try {
@@ -53,7 +63,8 @@ public class Projects {
 			}
 		}
 	}
-
+	
+	//Creates the project and its contents. It will set the parameters and prompts for the user to input.
 	private void createProject() {
 		String projectName = getStringInput("Enter the project name");
 		BigDecimal estimatedHours = getDecimalInput("Enter the estimated hours");
@@ -73,8 +84,13 @@ public class Projects {
 		System.out.println("You have successfully created project: " + dbProject);
 
 	}
-
-
+	
+	/*
+	 * Defines a method called "getDecimalInput" that returns a BigDecimal object from a String prompt.
+	 * Input will return null if no valid decimal input was given.
+	 * If a non-null string value is entered in, the method will convert that value into a BigDecimal object of two decimal places "(setScale)".
+	 * An exception will be thrown if the value format cannot be converted to a BigDecimal object.
+	 */
 	private BigDecimal getDecimalInput(String prompt) {
 		String input = getStringInput(prompt);
 		
@@ -89,7 +105,7 @@ public class Projects {
 		}
 	}
 
-
+	//Returns "Exiting the menu" message if the user presses the "Enter" key.
 	private boolean exitMenu() {
 		System.out.println("Exiting the menu.");
 		return true;
@@ -103,7 +119,7 @@ public class Projects {
 		return Objects.isNull(input) ? -1 : input;
 	}
 
-
+	//Prompts the user input as an integer. Throws an exception if the user enters in an invalid number
 	private Integer getIntInput(String prompt) {
 		String input = getStringInput(prompt);
 		
@@ -118,7 +134,10 @@ public class Projects {
 		}
 	}
 
-
+	/*
+	 * Prints the prompt as a String and gets input from the user. This is the lowest level input method.
+	 * Other method input methods such as "getIntInput" call this method and convert it to their respected data type.
+	 */
 	private String getStringInput(String prompt) {
 		System.out.print(prompt + ": ");
 		

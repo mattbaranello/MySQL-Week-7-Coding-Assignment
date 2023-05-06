@@ -8,7 +8,7 @@ public class ProjectService {
 	private ProjectDao projectDao = new ProjectDao();
 
 	public Project addProject(Project project) {
-		
+		//Calls the method "insertProject" on the "projectDao" method
 		return projectDao.insertProject(project);
 	}
 
