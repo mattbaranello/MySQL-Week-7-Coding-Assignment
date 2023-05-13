@@ -6,6 +6,7 @@ package projects.entity;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.sql.Time;
 
 /**
  * @author Promineo
@@ -18,10 +19,6 @@ public class Project {
   private BigDecimal actualHours;
   private Integer difficulty;
   private String notes;
-
-  private List<Material> materials = new LinkedList<>();
-  private List<Step> steps = new LinkedList<>();
-  private List<Category> categories = new LinkedList<>();
 
   public Integer getProjectId() {
     return projectId;
@@ -114,4 +111,8 @@ public class Project {
     
     return result;
   }
+
+  private List<Material> materials = new LinkedList<>();
+  private List<Step> steps = new LinkedList<>();
+  private List<Category> categories = new LinkedList<>();
 }

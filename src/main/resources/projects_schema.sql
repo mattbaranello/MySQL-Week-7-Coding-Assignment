@@ -10,9 +10,9 @@ CREATE TABLE project (
 	project_id INT AUTO_INCREMENT NOT NULL,
 	project_name VARCHAR(128) NOT NULL,
 	notes TEXT,
-	difficulty ENUM ('Easy', 'Medium', 'Hard'),
-	estimated_hours TIME,
-	actual_hours TIME,
+	difficulty INT,
+	estimated_hours DECIMAL,
+	actual_hours DECIMAL,
 	PRIMARY KEY (project_id)
 );
 
@@ -20,7 +20,7 @@ CREATE TABLE project (
 
 CREATE TABLE category (
 	category_id INT AUTO_INCREMENT NOT NULL,
-	category_name VARCHAR(64) NOT NULL,
+	category_name VARCHAR(128) NOT NULL,
 	PRIMARY KEY (category_id)
 );
 
@@ -30,9 +30,9 @@ CREATE TABLE category (
 CREATE TABLE material (
 	material_id INT AUTO_INCREMENT NOT NULL,
 	project_id INT NOT NULL,
-	material_name VARCHAR(34) NOT NULL,
-	num_required INT NOT NULL,
-	cost DECIMAL NOT NULL,
+	material_name VARCHAR(128) NOT NULL,
+	num_required INT,
+	cost DECIMAL,
 	PRIMARY KEY (material_id),
 	FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE
 );
@@ -45,7 +45,7 @@ CREATE TABLE project_category (
 	category_id INT NOT NULL,
 	FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE,
 	FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE,
-	UNIQUE KEY (project_id, category_id)
+	UNIQUE KEY (project_id, category_id) ON DELETE CASCADE
 );
 
 --Creates 'step' table and columns with their respected data type assigned within table, with 'step_id' as the primary key, as well
