@@ -24,7 +24,8 @@ public class Projects {
 				"1) Add a project",
 				"2) List projects",
 				"3) Select a project",
-				"4) Update project details"
+				"4) Update project details",
+				"5) Delete a project"
 		);
 		// @formatter:on
 		
@@ -63,6 +64,9 @@ public class Projects {
 					case 4:
 						updateProjectDetails();
 						break;
+					case 5:
+						deleteProject();
+						break;
 						
 				default:
 					System.out.println("\n" + selection + " is not a valid selection. Try again.");
@@ -75,9 +79,26 @@ public class Projects {
 			}
 		}
 	}
-	
+	//Creates a method to delete a project by calling a list of projects and having the user input the project ID.
+	private void deleteProject() {
+		listProjects();
+		
+		Integer projectId = getIntInput("Enter a project ID to select a project");
+		
+		projectService.deleteProject(projectId);
+		System.out.println("Project " + projectId + " was successfully deleted!");
+		
+		if(Objects.nonNull(curProject) && curProject.getProjectId().equals(projectId)) {
+			curProject = null;
+		}
+		
+		
+
+	}
+
 	/*
-	 * Method created to update a project's details. Create's input for projectName where user can enter the project name.
+	 * Method created to update a project's details. Create's input for projectName where user can enter the project information
+	 * Each project row is assigned their associated data type for the user to input and gets the information from the "Project" class..
 	 */
 	private void updateProjectDetails() {
 		if(Objects.isNull(curProject)) {
@@ -98,6 +119,7 @@ public class Projects {
 
 		Project project = new Project();
 		
+		
 		project.setProjectId(curProject.getProjectId());
 		project.setProjectName(Objects.isNull(projectName) ? curProject.getProjectName() : projectName);
 		project.setEstimatedHours(Objects.isNull(estimatedHours) ? curProject.getEstimatedHours() : estimatedHours);
@@ -106,7 +128,7 @@ public class Projects {
 		project.setNotes(Objects.isNull(notes) ? curProject.getNotes() : notes);
 
 		projectService.modifyProjectDetails(project);
-		curProject = projectService.fetchbyProjectId(curProject.getProjectId());
+		curProject = projectService.fetchProjectById(curProject.getProjectId());
 		
 	}
 
@@ -215,7 +237,10 @@ public class Projects {
 		return input.isBlank() ? null : input;
 	}
 
-
+	/*
+	 * This method prints the operations for the application. If a project (curProject) is null, it will print the message in the "if" statement.
+	 * If a project (curProject) is selected, the app will print the message in the "else" statement.
+	 */
 	private void printOperations() {
 		System.out.println("\nThese are the available selections. Press the Enter key to quit:");
 		

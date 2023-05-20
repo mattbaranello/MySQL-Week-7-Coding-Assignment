@@ -89,6 +89,10 @@ public class ProjectDao extends DaoBase {
 			throw new DbException(e);
 		}
 	}
+	/*
+	 * If the project object is not null, it proceeds to fetch additional related data (materials, steps, and categories) 
+	 * for the project using separate methods fetchMaterialsForProject, fetchStepsForProject, and fetchCategoriesForProject.
+	 */
 	public Optional<Project> fetchProjectById(Integer projectId) {
 		String sql = "SELECT * FROM " + PROJECT_TABLE + " WHERE project_id = ?";
 		
@@ -127,6 +131,7 @@ public class ProjectDao extends DaoBase {
 				throw new DbException(e);
 			}
 		}
+	//Returns a list of category. User will input the projectId from the CATEGORY_TABLE.
 	private List<Category> fetchCategoriesForProject(Connection conn, Integer projectId) throws SQLException {
 		// @formatter:off
 		String sql = ""
@@ -149,6 +154,7 @@ public class ProjectDao extends DaoBase {
 			}		
 		}			
 	}
+	//Returns a list of step. User will input the projectId from the STEP_TABLE.
 	private List<Step> fetchStepsForProject(Connection conn, Integer projectId) throws SQLException {
 	// @formatter:off
 	String sql = "SELECT * FROM " + STEP_TABLE + " WHERE project_id = ?";
@@ -168,7 +174,7 @@ public class ProjectDao extends DaoBase {
 			}		
 		}			
 	}
-
+	//Returns a list of materials. User will input the projectId from the MATERIAL_TABLE.
 	private List<Material> fetchMaterialsForProject(Connection conn, Integer projectId) throws SQLException {
 		// @formatter:off
 		String sql = "SELECT * FROM " + MATERIAL_TABLE + " WHERE project_id = ?";
@@ -188,6 +194,8 @@ public class ProjectDao extends DaoBase {
 			}		
 		}			
 	}
+	
+	//Modify's project details by running first utilizing the SQL query below so the user can input each parameter with a new value.
 	public boolean modifyProjectDetails(Project project) {
 		//@formatter:on
 		String sql = "" 
@@ -222,6 +230,30 @@ public class ProjectDao extends DaoBase {
 		} catch (SQLException e) {
 			throw new DbException(e);
 		}
+	}
+	//Deletes a project by utilizing SQL query that will delete a project from the PROJECT_TABLE after the user inputs a valid project ID.
+	public boolean deleteProject(Integer projectId) {
+			//@formatter:on
+			String sql = "DELETE FROM " + PROJECT_TABLE + " WHERE project_id = ?";
+			//@formatter:off
+			try(Connection conn = DbConnection.getConnection()) {
+				startTransaction(conn);
+				
+				try(PreparedStatement stmt = conn.prepareStatement(sql)) {
+					setParameter(stmt, 1, projectId, Integer.class);
+					
+					boolean deleted = stmt.executeUpdate() == 1;
+					commitTransaction(conn);
+					
+					return deleted;
+				}
+				catch(Exception e) {
+					rollbackTransaction(conn);
+					throw new DbException(e);
+				}
+			} catch (SQLException e) {
+				throw new DbException(e);
+			}
 	}
 }
 

@@ -26,15 +26,24 @@ public class ProjectService {
 		return projectDao.fetchProjectById(projectId).orElseThrow(() -> new NoSuchElementException(
 				"Project with project ID=" + projectId + " does not exist"));			
 	}
+	/*
+	 *modifies project details that corresponds to a projectID entered by the user. 
+	 *If the project Id does not exist, it will throw an error message.
+	 */
 	public void modifyProjectDetails(Project project) {
 		if(!projectDao.modifyProjectDetails(project)) {
 			throw new DbException("Project with ID=" + project.getProjectId() + " does not exist");
 		}
 	}
-	public Project fetchbyProjectId(Integer projectId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
+	/*
+	 *deletes a project that corresponds to a projectID entered by the user. 
+	 *If the project Id does not exist, it will throw an error message.
+	 */
+	public void deleteProject(Integer projectId) {
+		if(!projectDao.deleteProject(projectId)) {
+			throw new DbException("Project with ID=" + projectId + " does not exist.");
+		}
+	}	
 
 }
